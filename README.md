@@ -1,5 +1,9 @@
 # SOAR-Lite Threat Intel Automation
 
+<p align="center">
+  <img src="./assets/soar-lite-overview.png" alt="SOAR-Lite Banner" width="400"/>
+</p>
+
 A lightweight, modular, and real-time SOAR-like API designed to enrich security alerts with threat intelligence, calculate contextual risk scores, and recommend response actions (block, escalate, monitor). Ideal for SOC teams, security engineers, or incident responders looking to automate triage and reduce alert fatigue without the complexity or cost of full SOAR platforms.
 
 ---
@@ -15,7 +19,7 @@ A lightweight, modular, and real-time SOAR-like API designed to enrich security 
 
 ## 👤 Author
 
-**Renato Silva Kopke**  
+**Renato Kopke**  
 Cybersecurity • Incident Response • Threat Hunting • Automation Enthusiast  
 Licensed under the [Apache License 2.0](./LICENSE)
 
@@ -67,6 +71,8 @@ curl -X POST "http://localhost:8000/process-alert" -F "file=@data/alerts.csv"
 Open in your browser:
 👉 http://localhost:8000/report
 
+![SOAR-Lite Report](./assets/report.png)
+
 
 ### 📊 Example Input (CSV)
 ```
@@ -81,6 +87,6 @@ Licensed under the [Apache License 2.0](./LICENSE)
 
 ### 🙋‍♂️ About the Author
 
-Created by Renato Silva Kopke, cybersecurity focused on incident response, automation, and practical engineering.
+Created by Renato Kopke, cybersecurity focused on incident response, automation, and practical engineering.
 
 Feel free to connect or reach out on [LinkedIn](https://linkedin.com/in/renatokopke) if you'd like to collaborate or share feedback.

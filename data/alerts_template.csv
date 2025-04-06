@@ -1,0 +1,10 @@
+# This is a base template created to help analysts easily update alert data.
+# Copy this file to alerts.csv and populate it with real alerts for analysis.
+# Format: timestamp,src_ip,dst_ip,event_type
+
+timestamp,src_ip,dst_ip,event_type
+2025-04-05T08:12:00,185.220.101.17,10.0.0.5,brute_force
+2025-04-05T08:45:00,103.45.22.18,10.0.0.7,port_scan
+2025-04-05T09:15:00,144.76.60.195,10.0.0.8,malware_traffic
+2025-04-05T09:40:00,89.248.165.63,10.0.0.15,c2_traffic
+2025-04-05T10:00:00,162.247.74.200,10.0.0.22,suspicious_login

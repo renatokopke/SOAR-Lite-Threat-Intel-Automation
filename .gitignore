@@ -1,5 +1,7 @@
 /output/
 /logs/
+data/high_abuse_countries.json
+
 __pycache__/
 *.py[cod]
 
@@ -12,6 +14,8 @@ __pycache__/
 
 .vscode/
 .idea/
+.venv
+.venv/
 *.sublime-project
 *.sublime-workspace
 

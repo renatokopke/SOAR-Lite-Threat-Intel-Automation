@@ -1,0 +1,24 @@
+[project]
+name = "soar-lite-threat-intel-automation"
+version = "0.1.0"
+description = "Lightweight SOAR-like API for enriching security alerts, scoring risk, and recommending actions."
+authors = [
+    { name = "Renato Kopke", email = "renatokopke@gmail.com" }
+]
+license = { text = "Apache 2" }
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "requests",
+    "python-dotenv"
+]
+
+[tool.setuptools]
+package-dir = {"" = "IR"}
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
