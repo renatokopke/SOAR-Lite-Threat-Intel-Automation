@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [tool.setuptools]
-package-dir = {"" = "IR"}
+package-dir = {"" = "core"}
 
 [build-system]
 requires = ["setuptools", "wheel"]

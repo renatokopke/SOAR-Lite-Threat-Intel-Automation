@@ -1,0 +1,113 @@
+<html>
+<head>
+    <title>Upload Alerts CSV</title>
+    <meta name="author" content="Renato Kopke">
+    <meta name="license" content="Apache License 2.0">
+    <link rel="icon" type="image/x-icon" href="/static/public/images/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .progress { height: 20px; }
+        pre { font-size: 0.85rem; }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+
+        <div class="text-center mb-4">
+            <img src="/static/public/images/logo-soar-lite.png"
+                 alt="SOAR Lite Logo"
+                 class="img-fluid mb-3 shadow-sm"
+                 style="max-height: 80px; border-radius: 12px; border: 1px solid #dee2e6;">
+            <h1 class="fs-3">Upload Alerts (CSV)</h1>
+            <p class="text-muted">Submit a CSV file with enriched alert data to process and classify.</p>
+        </div>
+
+        <div class="card shadow-sm p-4 mx-auto" style="max-width: 650px;">
+            <form id="upload-form" class="mb-3">
+                <div class="mb-3">
+                    <label for="file" class="form-label">Select <code>alerts.csv</code> file:</label>
+                    <input type="file" class="form-control" id="file" name="file" accept=".csv" required>
+                </div>
+                <div class="progress mb-3 d-none" id="upload-progress">
+                    <div id="progress-bar" class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 0%">0%</div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-cloud-upload me-2"></i> Upload and Process
+                </button>
+            </form>
+
+            <!-- CSV format info -->
+            <div class="alert alert-info small mt-4" role="alert">
+                <strong>Expected format:</strong> <code>timestamp,src_ip,dst_ip,event_type</code>
+                <pre class="bg-light p-2 rounded mb-1">
+2025-04-05T08:12:00,185.220.101.17,10.0.0.5,brute_force
+2025-04-05T08:45:00,103.45.22.18,10.0.0.7,port_scan
+2025-04-05T09:15:00,144.76.60.195,10.0.0.8,malware_traffic
+                </pre>
+                <a href="/static/public/alerts-template.csv" class="btn btn-sm btn-outline-primary mt-2">
+                    <i class="bi bi-download me-1"></i> Download CSV Template
+                </a>
+            </div>
+
+            <a href="/" class="btn btn-outline-secondary mt-3 w-100">
+                <i class="bi bi-arrow-left-circle me-1"></i> Back to Home
+            </a>
+        </div>
+
+        <footer class='text-center mt-5 text-muted'>
+            <p class='small'>
+                Developed by <strong>Renato Kopke</strong> · GitHub: <a href='https://github.com/renatokopke' target='_blank'>@renatokopke</a><br>
+                Part of the <em>SOAR Lite Threat Intel Automation</em> project – April 2025
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        const form = document.getElementById('upload-form');
+        const fileInput = document.getElementById('file');
+        const progressContainer = document.getElementById('upload-progress');
+        const progressBar = document.getElementById('progress-bar');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/process-alert', true);
+
+            xhr.upload.addEventListener('loadstart', () => {
+                progressContainer.classList.remove('d-none');
+                progressBar.style.width = '0%';
+                progressBar.innerText = '0%';
+            });
+
+            xhr.upload.addEventListener('progress', (e) => {
+                if (e.lengthComputable) {
+                    const percent = Math.round((e.loaded / e.total) * 100);
+                    progressBar.style.width = percent + '%';
+                    progressBar.innerText = percent + '%';
+                }
+            });
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    window.location.href = "/";
+                } else {
+                    alert("Upload failed: " + xhr.statusText);
+                    progressBar.classList.remove("bg-primary");
+                    progressBar.classList.add("bg-danger");
+                    progressBar.innerText = "Failed";
+                }
+            };
+
+            xhr.send(formData);
+        });
+    </script>
+</body>
+</html>

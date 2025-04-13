@@ -1,0 +1,71 @@
+<html>
+<head>
+    <title>Model Performance Dashboard</title>
+    <meta name="author" content="Renato Kopke">
+    <meta name="license" content="Apache License 2.0">
+    <link rel="icon" type="image/x-icon" href="/static/public/images/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="container py-5">
+
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+    <div class="d-flex align-items-center">
+        <img src="/static/public/images/logo-soar-lite.png"
+             alt="SOAR Lite Logo"
+             style="max-height: 60px; border-radius: 8px; border: 1px solid #dee2e6;"
+             class="me-3">
+        <h1 class="mb-0 fs-3">SOAR Lite - Model Performance Dashboard</h1>
+    </div>
+
+    <h1 class="mb-0">SOAR-Lite – Enriched Alert Report</h1>
+    <a href="/" class="btn btn-outline-secondary">
+      <i class="bi bi-house-door me-1"></i> Back to Home
+    </a>
+
+</div>
+
+    <p>Below is the historical performance of your trained alert classification models:</p>
+
+    <!-- Scrollable metrics table -->
+    <div class="table-responsive mb-5" style="max-height: 400px; overflow-y: auto;">
+        <table class="table table-bordered table-striped table-hover table-sm align-middle">
+            {table}
+        </table>
+    </div>
+
+    <!-- Charts -->
+    <h2 class="mt-5 mb-3">Metric Evolution Charts</h2>
+    <h2 class="mt-5 mb-3">Interactive Charts</h2>
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="border rounded shadow-sm p-2">
+                <iframe src="/static/public/artifacts/charts/plotly_accuracy.html" width="100%" height="420" frameborder="0"></iframe>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="border rounded shadow-sm p-2">
+                <iframe src="/static/public/artifacts/charts/plotly_precision_macro.html" width="100%" height="420" frameborder="0"></iframe>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="border rounded shadow-sm p-2">
+                <iframe src="/static/public/artifacts/charts/plotly_recall_macro.html" width="100%" height="420" frameborder="0"></iframe>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="border rounded shadow-sm p-2">
+                <iframe src="/static/public/artifacts/charts/plotly_f1_macro.html" width="100%" height="420" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <footer class='text-center mt-5 text-muted'>
+        <p class='small'>
+            Developed by <strong>Renato Kopke</strong> · GitHub: <a href='https://github.com/renatokopke' target='_blank'>@renatokopke</a><br>
+            Part of the <em>SOAR Lite Threat Intel Automation</em> project – April 2025
+        </p>
+    </footer>
+
+</body>
+</html>

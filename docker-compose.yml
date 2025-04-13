@@ -9,7 +9,9 @@ services:
     env_file:
       - .env
     volumes:
+      - ./:/app
       - ./data:/app/data
       - ./output:/app/output
       - ./logs:/app/logs
+      - ./models:/app/models
     restart: unless-stopped
