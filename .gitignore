@@ -1,6 +1,8 @@
 /output/
 /logs/
 data/high_abuse_countries.json
+/models/*
+./0-Temp
 
 __pycache__/
 *.py[cod]

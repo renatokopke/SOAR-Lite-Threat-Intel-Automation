@@ -3,3 +3,9 @@ uvicorn
 requests
 python-dotenv
 python-multipart
+watchgod
+pandas
+scikit-learn
+matplotlib
+seaborn
+plotly>=5.0.0

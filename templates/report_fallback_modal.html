@@ -1,0 +1,49 @@
+<html>
+<head>
+    <title>SOAR Lite - {fallback_page_title}</title>
+    <meta name="author" content="Renato Kopke">
+    <meta name="license" content="Apache License 2.0">
+    <link rel="icon" href="/static/public/images/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="bg-light">
+    <div class="container py-5 text-center">
+        <img src="/static/public/images/logo-soar-lite.png" alt="Logo" style="max-height: 80px;" class="mb-4">
+        <h1 class="mb-4">SOAR Lite - Report</h1>
+        <p class="text-muted">We could not generate the report because there are no processed alerts yet.</p>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+            <i class="bi bi-info-circle me-1"></i> How to generate a report
+        </button>
+        <br><br>
+        <a href="/" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left-circle me-1"></i> Back to Home
+        </a>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="uploadModalLabel">How to generate the report</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-start">
+            <ul class="mb-0">
+              <li>Step 1: Upload a file with enriched alerts via the <strong>Upload Alerts</strong> menu.</li>
+              <li>Step 2: Return to the <strong>Report</strong> menu to view the results.</li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <a href="/upload-alerts" class="btn btn-success">
+                <i class="bi bi-upload me-1"></i> Go to Upload
+            </a>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+</html>
