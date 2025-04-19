@@ -4,12 +4,15 @@ VT_API_KEY='virustotal_key_here'
 # Debug Mode
 DEBUG_MODE=true
 
-# actions
+# Actions based on risk thresholds
+# Minimum score for HIGH risk classification
 HIGH_RISK_THRESHOLD=85
+
+# Minimum score for MEDIUM risk classification
 MEDIUM_RISK_THRESHOLD=60
 
-# Webhook (alerts)
+# Slack Webhook URL used to send alerts from the system
 #WEBHOOK_URL=https://hooks.slack.com/services/XXX/YYY/ZZZ
 
-# URLs
+# Slack alert "View Full Report" button link
 REPORT_URL=http://localhost:8000/report

@@ -9,7 +9,7 @@
 </p>
 
 
-👉 [Watch the demo](https://www.youtube.com/watch?v=7DTvlmjtSO0) (2 min)
+👉 [Watch the demo](https://youtu.be/aH_EuDBAaaA) (2 min)
 
 <p align="center">
   <img src="./assets/v1.2.0/soar-lite-portal.png" alt="SOAR-Lite Banner" width="1024"/>
@@ -84,8 +84,25 @@ docker-compose up --build
 Edit the `.env` file:
 
 ```env
-ABUSEIPDB_API_KEY='your_api_key_here'
-DEBUG_MODE=true         # Set to false to use real API enrichment
+ABUSEIPDB_API_KEY='abuseipdb_key_here'
+VT_API_KEY='virustotal_key_here'
+
+# Debug Mode
+DEBUG_MODE=true
+
+# Actions based on risk thresholds
+# Minimum score for HIGH risk classification
+HIGH_RISK_THRESHOLD=85
+
+# Minimum score for MEDIUM risk classification
+MEDIUM_RISK_THRESHOLD=60
+
+
+# Slack Webhook URL used to send alerts from the system
+#WEBHOOK_URL=https://hooks.slack.com/services/XXX/YYY/ZZZ
+
+# Slack alert "View Full Report" button link
+REPORT_URL=http://localhost:8000/report
 ```
 
 ---
