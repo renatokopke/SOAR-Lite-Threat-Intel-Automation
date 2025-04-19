@@ -20,6 +20,9 @@ __pycache__/
 .venv/
 *.sublime-project
 *.sublime-workspace
+output/results.json
+data/dataset_for_ml.csv
+data/high_abuse_countries.json
 
 .DS_Store
 Thumbs.db

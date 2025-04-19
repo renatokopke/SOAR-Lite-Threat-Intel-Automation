@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Upload Alerts CSV</title>
+    <title>SOAR Lite - Upload Alerts CSV</title>
     <meta name="author" content="Renato Kopke">
     <meta name="license" content="Apache License 2.0">
     <link rel="icon" type="image/x-icon" href="/static/public/images/favicon.ico">
@@ -39,12 +39,16 @@
 
             <!-- CSV format info -->
             <div class="alert alert-info small mt-4" role="alert">
-                <strong>Expected format:</strong> <code>timestamp,src_ip,dst_ip,event_type</code>
-                <pre class="bg-light p-2 rounded mb-1">
-2025-04-05T08:12:00,185.220.101.17,10.0.0.5,brute_force
-2025-04-05T08:45:00,103.45.22.18,10.0.0.7,port_scan
-2025-04-05T09:15:00,144.76.60.195,10.0.0.8,malware_traffic
+                <strong>Expected format:</strong> <code>timestamp,ioc_type,ioc_value,event_type</code>
+                <pre class="bg-light p-2 rounded border">
+Expected format: <span class="text-primary">
+timestamp,ioc_type,ioc_value,event_type</span>
+2025-04-14T08:30:00,ip,45.83.91.12,port_scan
+2025-04-14T08:40:00,domain,maliciousdomain.com,data_exfiltration
+2025-04-14T08:45:00,hash,44d88612fea8a8f36de82e1278abb02f,malware_traffic
+2025-04-14T08:50:00,url,http://phishing-site.com/index.html,suspicious_login
                 </pre>
+
                 <a href="/static/public/alerts-template.csv" class="btn btn-sm btn-outline-primary mt-2">
                     <i class="bi bi-download me-1"></i> Download CSV Template
                 </a>
@@ -58,7 +62,7 @@
         <footer class='text-center mt-5 text-muted'>
             <p class='small'>
                 Developed by <strong>Renato Kopke</strong> · GitHub: <a href='https://github.com/renatokopke' target='_blank'>@renatokopke</a><br>
-                Part of the <em>SOAR Lite Threat Intel Automation</em> project – April 2025
+                SOAR Lite Threat Intel Automation – <small class="text-muted">v{{ version }}</small> © 2025
             </p>
         </footer>
     </div>

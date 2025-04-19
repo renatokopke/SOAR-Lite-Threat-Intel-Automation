@@ -1,0 +1,14 @@
+Accuracy: 0.00
+Precision (macro): 0.00
+Recall (macro): 0.00
+F1-score (macro): 0.00
+Support: 1
+
+                   precision    recall  f1-score   support
+
+BLOCK IMMEDIATELY       0.00      0.00      0.00       0.0
+          MONITOR       0.00      0.00      0.00       1.0
+
+         accuracy                           0.00       1.0
+        macro avg       0.00      0.00      0.00       1.0
+     weighted avg       0.00      0.00      0.00       1.0

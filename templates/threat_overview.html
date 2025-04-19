@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SOAR Lite - Threat Intelligence Overview</title>
+  <meta name="author" content="Renato Kopke">
+  <meta name="license" content="Apache License 2.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    .dashboard-section {
+      margin-bottom: 3rem;
+    }
+    .dashboard-title {
+      font-size: 1.25rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    .chart-container {
+      width: 100%;
+      height: 400px;
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div class="d-flex align-items-center">
+        <img src="/static/public/images/logo-soar-lite.png" alt="SOAR Lite Logo" style="max-height: 60px; border-radius: 8px; border: 1px solid #dee2e6;" class="me-3">
+        <h2 class="fw-bold mb-0">SOAR Lite – Threat Intelligence Overview</h2>
+      </div>
+      <a href="/" class="btn btn-outline-secondary">
+        <i class="bi bi-house-door me-1"></i> Back to Home
+      </a>
+    </div>
+
+    <div class="dashboard-section">
+      <div class="dashboard-title">📌 IOC Types Distribution</div>
+      <div id="iocTypesChart" class="chart-container"></div>
+    </div>
+
+    <div class="dashboard-section">
+      <div class="dashboard-title">📌 Top MITRE Techniques</div>
+      <div id="mitreTechniquesChart" class="chart-container"></div>
+    </div>
+
+    <div class="dashboard-section">
+      <div class="dashboard-title">📌 Source Countries of Alerts</div>
+      <div id="countriesChart" class="chart-container"></div>
+    </div>
+
+    <div class="dashboard-section">
+      <div class="dashboard-title">📌 ML Priority Breakdown</div>
+      <div id="mlPriorityChart" class="chart-container"></div>
+    </div>
+
+    <div class="dashboard-section">
+      <div class="dashboard-title">📌 Average Legacy Risk Score by ML Priority</div>
+      <div id="riskVsMlPriorityChart" class="chart-container"></div>
+    </div>
+
+    <footer class="text-center text-muted mt-5 small">
+        Developed by <strong>Renato Kopke</strong> · GitHub: <a href='https://github.com/renatokopke' target='_blank'>@renatokopke</a><br>
+        SOAR Lite Threat Intel Automation – <small class="text-muted">v{{ version }}</small> © 2025
+    </footer>
+  </div>
+
+  <script>
+    const iocTypes = {{ data.ioc_types|tojson }};
+    const mitreTechniques = {{ data.mitre_techniques|tojson }};
+    const countries = {{ data.countries|tojson }};
+    const mlPriority = {{ data.ml_priority|tojson }};
+
+    Plotly.newPlot('iocTypesChart', [{
+      type: 'pie',
+      labels: iocTypes.map(i => i[0]),
+      values: iocTypes.map(i => i[1])
+    }]);
+
+    Plotly.newPlot('mitreTechniquesChart', [{
+      type: 'bar',
+      x: mitreTechniques.map(i => i[0]),
+      y: mitreTechniques.map(i => i[1]),
+      marker: { color: '#007bff' }
+    }]);
+
+    Plotly.newPlot('countriesChart', [{
+      type: 'bar',
+      x: countries.map(i => i[0]),
+      y: countries.map(i => i[1]),
+      marker: { color: '#6f42c1' }
+    }]);
+
+    Plotly.newPlot('mlPriorityChart', [{
+      type: 'pie',
+      labels: mlPriority.map(i => i[0]),
+      values: mlPriority.map(i => i[1])
+    }]);
+
+    const riskAvgByMlPriority = {{ data.risk_score_avg_by_priority|tojson }};
+    Plotly.newPlot('riskVsMlPriorityChart', [{
+      type: 'bar',
+      x: Object.keys(riskAvgByMlPriority),
+      y: Object.values(riskAvgByMlPriority),
+      marker: { color: ['#dc3545', '#ffc107', '#0d6efd'] }
+    }]);
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

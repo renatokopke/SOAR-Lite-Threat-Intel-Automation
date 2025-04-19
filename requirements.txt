@@ -9,3 +9,4 @@ scikit-learn
 matplotlib
 seaborn
 plotly>=5.0.0
+jinja2

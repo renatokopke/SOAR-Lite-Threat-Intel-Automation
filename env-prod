@@ -1,6 +1,15 @@
-ABUSEIPDB_API_KEY=abuseipdb_key_here
+ABUSEIPDB_API_KEY='abuseipdb_key_here'
+VT_API_KEY='virustotal_key_here'
+
+# Debug Mode
 DEBUG_MODE=true
 
 # actions
 HIGH_RISK_THRESHOLD=85
 MEDIUM_RISK_THRESHOLD=60
+
+# Webhook (alerts)
+#WEBHOOK_URL=https://hooks.slack.com/services/XXX/YYY/ZZZ
+
+# URLs
+REPORT_URL=http://localhost:8000/report

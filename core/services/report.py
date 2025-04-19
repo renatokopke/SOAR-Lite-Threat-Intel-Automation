@@ -44,16 +44,86 @@ def generate_html_report(json_path):
         else:
             highlight_class = ""
 
+        ioc_type = item.get("ioc_type", "ip")
+        ioc_value = item.get("ioc_value", item.get("src_ip"))
+
+        # Determine which sources were used
+        sources = item.get("sources", {})
+        used_sources = []
+        if "abuseipdb" in sources:
+            used_sources.append("AbuseIPDB")
+        if "virustotal" in sources:
+            used_sources.append("VirusTotal")
+        sources_str = ", ".join(used_sources) if used_sources else "N/A"
+
+        # MITRE ATT&CK rendering
+        mitre_info = item.get("mitre_technique", {})
+        tactic = mitre_info.get("tactic", "Unknown").lower()
+
+        tactic_colors = {
+            "discovery": "#007bff",
+            "credential access": "#dc3545",
+            "command and control": "#ffc107",
+            "exfiltration": "#6f42c1",
+            "unknown": "#6c757d"
+        }
+
+        color = tactic_colors.get(tactic, "#6c757d")
+
+        mitre_str = f"""<div style='
+            background-color:{color};
+            color:white;
+            padding:4px 6px;
+            border-radius:4px;
+            font-size:90%;
+            display: inline-block;
+            text-align: center;
+            max-width: 220px;
+        ' title="{mitre_info.get('id', 'T0000')} – {mitre_info.get('name', 'Unknown')}">
+            <strong>{mitre_info.get('id', 'T0000')}</strong><br>
+            <span style='font-size:85%;'>{mitre_info.get('name', 'Unknown')}</span>
+        </div>"""
+
+        seen_count = item.get("seen_count", 0)
+        if seen_count > 0:
+            seen_str = f"""<span class='badge bg-warning text-dark' title='Seen {seen_count} time(s) in previous alerts'>
+            Seen {seen_count}x
+            </span>"""
+        else:
+            seen_str = "<span class='text-muted'>–</span>"
+
+        country = item['enrichment'].get('country', 'unknown')
+        country_str = "<span class='text-muted'>–</span>" if country.lower() in ["unknown", "n/a"] else html.escape(country)
+
+        priority_colors = {
+            "block immediately": "danger",
+            "escalate to tier 2": "warning text-dark",
+            "monitor": "primary",
+            "unclassified": "secondary text-white"
+        }
+
+        priority_key = predicted.lower()
+        badge_class = priority_colors.get(priority_key, "secondary text-white")
+        ml_str = f"<span class='badge bg-{badge_class}'>{html.escape(predicted)}</span>"
+
+        confidence = item.get("confidence_score", 0)
+        confidence_str = f"<span class='badge bg-info text-dark'>{confidence:.2f}</span>"
+
         table_rows += f"""
         <tr class="{highlight_class}">
             <td>{html.escape(item['timestamp'])}</td>
-            <td>{html.escape(item['src_ip'])}</td>
             <td>{html.escape(item['event_type'])}</td>
+            <td>{html.escape(ioc_type)}</td>
+            <td>{html.escape(ioc_value)}</td>
+            <td>{seen_str}</td>
+            <td>{country_str}</td>
+            <td>{item['enrichment'].get('abuse_score', 'N/A')}</td>
+            <td>{html.escape(sources_str)}</td>
+            <td>{mitre_str}</td>
             <td>{item['risk_score']}</td>
             <td>{html.escape(suggested)}</td>
-            <td>{html.escape(predicted)}</td>
-            <td>{html.escape(item['enrichment'].get('country', 'N/A'))}</td>
-            <td>{item['enrichment'].get('abuse_score', 'N/A')}</td>
+            <td>{ml_str}</td>
+            <td>{confidence_str}</td>
         </tr>
         """
 

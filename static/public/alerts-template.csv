@@ -1,6 +1,5 @@
-timestamp,src_ip,dst_ip,event_type
-2025-04-05T08:12:00,185.220.101.17,10.0.0.5,brute_force
-2025-04-05T08:45:00,103.45.22.18,10.0.0.7,port_scan
-2025-04-05T09:15:00,144.76.60.195,10.0.0.8,malware_traffic
-2025-04-05T09:40:00,89.248.165.63,10.0.0.15,c2_traffic
-2025-04-05T10:00:00,162.247.74.200,10.0.0.22,suspicious_login
+timestamp,ioc_type,ioc_value,event_type
+2025-04-14T08:30:00,ip,45.83.91.12,port_scan
+2025-04-14T08:40:00,domain,maliciousdomain.com,data_exfiltration
+2025-04-14T08:45:00,hash,44d88612fea8a8f36de82e1278abb02f,malware_traffic
+2025-04-14T08:50:00,url,http://phishing-site.com/index.html,suspicious_login

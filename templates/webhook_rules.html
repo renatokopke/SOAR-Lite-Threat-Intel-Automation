@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SOAR Lite - Webhook Rules – SOAR Lite</title>
+  <meta name="author" content="Renato Kopke">
+  <meta name="license" content="Apache License 2.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div class="d-flex align-items-center">
+        <img src="/static/public/images/logo-soar-lite.png" alt="SOAR Lite Logo" style="max-height: 60px; border-radius: 8px; border: 1px solid #dee2e6;" class="me-3">
+        <h2 class="fw-bold mb-0">⚙️ Webhook Trigger Rules</h2>
+      </div>
+      <a href="/" class="btn btn-outline-secondary">⬅ Back</a>
+    </div>
+
+    {% if message %}
+    <div class="alert alert-info">{{ message }}</div>
+    <script>
+      setTimeout(() => location.href = "/webhook-rules", 1200);
+    </script>
+    {% endif %}
+
+    <form method="post" action="/webhook-rules" class="border p-4 rounded bg-white shadow-sm">
+      {% if edit_rule is defined %}
+        <input type="hidden" name="destination" value="{{ edit_destination }}">
+        <input type="hidden" name="edit_index" value="{{ edit_index }}">
+      {% endif %}
+
+      <div class="mb-3">
+        <label for="destination" class="form-label">Destination</label>
+        {% if edit_rule is defined %}
+          <input type="text" class="form-control" value="{{ edit_destination }}" readonly>
+        {% else %}
+          <select name="destination" class="form-select" required>
+            <option value="slack">slack</option>
+            <option value="teams" disabled>teams (coming soon)</option>
+            <option value="sentinelone" disabled>sentinelone (coming soon)</option>
+            <option value="webhook_generic" disabled>webhook_generic (coming soon)</option>
+          </select>
+        {% endif %}
+        <small class="text-muted">Only Slack is supported at this time.</small>
+      </div>
+
+      <div class="mb-3">
+        <label for="ml_priority" class="form-label">Trigger on ML Priority</label>
+        <select name="ml_priority" class="form-select" multiple required>
+          {% set priorities = edit_rule.ml_priority if edit_rule is defined else [] %}
+          <option value="BLOCK IMMEDIATELY" {% if 'BLOCK IMMEDIATELY' in priorities %}selected{% endif %}>BLOCK IMMEDIATELY</option>
+          <option value="ESCALATE TO TIER 2" {% if 'ESCALATE TO TIER 2' in priorities %}selected{% endif %}>ESCALATE TO TIER 2</option>
+          <option value="MONITOR" {% if 'MONITOR' in priorities %}selected{% endif %}>MONITOR</option>
+        </select>
+        <small class="text-muted">Hold Ctrl or Cmd to select multiple.</small>
+      </div>
+
+      <div class="mb-3">
+        <label for="event_type" class="form-label">Event Type (Optional)</label>
+        <select name="event_type" class="form-select" multiple>
+          {% set types = edit_rule.event_type if edit_rule is defined and edit_rule.event_type is defined else [] %}
+          <option value="port_scan" {% if 'port_scan' in types %}selected{% endif %}>port_scan</option>
+          <option value="suspicious_login" {% if 'suspicious_login' in types %}selected{% endif %}>suspicious_login</option>
+          <option value="malware_traffic" {% if 'malware_traffic' in types %}selected{% endif %}>malware_traffic</option>
+          <option value="brute_force" {% if 'brute_force' in types %}selected{% endif %}>brute_force</option>
+          <option value="data_exfiltration" {% if 'data_exfiltration' in types %}selected{% endif %}>data_exfiltration</option>
+          <option value="c2_traffic" {% if 'c2_traffic' in types %}selected{% endif %}>c2_traffic</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="confidence_score_min" class="form-label">Minimum Confidence Score</label>
+        <input type="number" step="0.01" min="0" max="1" name="confidence_score_min" class="form-control" value="{{ edit_rule.confidence_score_min if edit_rule is defined else '0.85' }}" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary">💾 Save Rule</button>
+    </form>
+
+    <hr class="my-4">
+    <h5 class="mb-3">📄 Current Webhook Rules</h5>
+
+    {% for dest, rules in config.items() if dest != 'trigger_conditions' %}
+      <div class="card mb-3">
+        <div class="card-header">
+          <strong>Destination:</strong> {{ dest }}
+        </div>
+        {% for rule in rules %}
+        <div class="card-body border-bottom {% if not rule.enabled %}bg-light text-muted{% endif %}">
+          <p><strong>ML Priority:</strong> {{ rule.ml_priority | join(', ') }}</p>
+          <p><strong>Confidence Min:</strong> {{ rule.confidence_score_min }}</p>
+          {% if rule.event_type %}
+            <p><strong>Event Types:</strong> {{ rule.event_type | join(', ') }}</p>
+          {% endif %}
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>Status:</strong>
+              {% if rule.enabled %}
+                <span class="badge bg-success">Enabled</span>
+              {% else %}
+                <span class="badge bg-secondary">Disabled</span>
+              {% endif %}
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <form method="post" action="/webhook-rules/toggle">
+                <input type="hidden" name="destination" value="{{ dest }}">
+                <input type="hidden" name="index" value="{{ loop.index0 }}">
+                <button type="submit" class="btn btn-sm btn-outline-primary">
+                  {% if rule.enabled %}🔴 Disable{% else %}🟢 Enable{% endif %}
+                </button>
+              </form>
+              <form method="post" action="/webhook-rules/edit">
+                <input type="hidden" name="destination" value="{{ dest }}">
+                <input type="hidden" name="index" value="{{ loop.index0 }}">
+                <button type="submit" class="btn btn-sm btn-outline-secondary">✏️ Edit</button>
+              </form>
+              <form method="post" action="/webhook-rules/delete" onsubmit="return confirm('Delete this rule?')">
+                <input type="hidden" name="destination" value="{{ dest }}">
+                <input type="hidden" name="index" value="{{ loop.index0 }}">
+                <button type="submit" class="btn btn-sm btn-outline-danger">🗑 Delete</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <footer class='text-center mt-5 text-muted'>
+    <p class='small'>
+        Developed by <strong>Renato Kopke</strong> · GitHub: <a href='https://github.com/renatokopke' target='_blank'>@renatokopke</a><br>
+        SOAR Lite Threat Intel Automation – <small class="text-muted">v{{ version }}</small> © 2025
+    </p>
+  </footer>
+</body>
+</html>

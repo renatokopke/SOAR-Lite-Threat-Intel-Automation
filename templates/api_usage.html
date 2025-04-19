@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SOAR Lite – Developer API Guide</title>
+  <meta name="author" content="Renato Kopke">
+  <meta name="license" content="Apache License 2.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <style>
+    pre code {
+      border-radius: 8px;
+      padding: 1rem;
+      display: block;
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div class="d-flex align-items-center">
+        <img src="/static/public/images/logo-soar-lite.png" alt="SOAR Lite Logo" style="max-height: 60px; border-radius: 8px; border: 1px solid #dee2e6;" class="me-3">
+        <h2 class="fw-bold mb-0">SOAR Lite – API Developer Guide</h2>
+      </div>
+      <a href="/" class="btn btn-outline-secondary">
+        <i class="bi bi-house-door me-1"></i> Back to Home
+      </a>
+    </div>
+
+    <div class="accordion" id="apiAccordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            📤 Upload Alerts CSV – POST /process-alert
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#apiAccordion"><div class="accordion-body">
+            <p>This endpoint allows you to upload a CSV file with alerts. The system will enrich and classify them automatically.</p>
+            <strong>Expected fields in alerts.csv:</strong>
+            <ul>
+              <li><code>timestamp</code></li>
+              <li><code>ioc_type</code> (ip, domain, hash, url)</li>
+              <li><code>ioc_value</code></li>
+              <li><code>event_type</code></li>
+            </ul>
+            <p><strong>Example using <code>curl</code>:</strong></p>
+            <pre><code class="bash">curl -X POST http://localhost:8000/process-alert \
+  -F "file=@data/alerts.csv" \
+  -H "accept: application/json"</code></pre>
+
+            <p><strong>Example using Python (requests):</strong></p>
+            <pre><code class="python">import requests
+
+with open("data/alerts.csv", "rb") as f:
+    res = requests.post("http://localhost:8000/process-alert", files={"file": f})
+    print(res.status_code)
+    print(res.json())</code></pre>
+
+            <p><strong>Response:</strong> <code>200 OK</code> with enriched and classified alerts as JSON array.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTwo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            📥 Retrieve Processed Alerts – GET /output/results.json
+          </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#apiAccordion">
+          <div class="accordion-body">
+            <p>You can retrieve the last processed alerts (enriched + ML priority) directly via:</p>
+            <pre><code class="bash">curl http://localhost:8000/output/results.json</code></pre>
+
+            <p>Use this to feed other dashboards, aggregators or detection systems.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingThree">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            🧠 Retrain Model – POST /train-model
+          </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#apiAccordion">
+          <div class="accordion-body">
+            <p>Triggers a retrain using the latest data in <code>dataset_for_ml.csv</code>.</p>
+            <pre><code class="bash">curl -X POST http://localhost:8000/train-model</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="text-center text-muted mt-5 small">
+      Developed by <strong>Renato Kopke</strong> · GitHub: <a href='https://github.com/renatokopke' target='_blank'>@renatokopke</a><br>
+      SOAR Lite Threat Intel Automation – <small class="text-muted">v{{ version }}</small> © 2025
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

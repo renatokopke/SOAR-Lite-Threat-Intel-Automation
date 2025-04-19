@@ -1,4 +1,4 @@
-# This dockerfile builds the SOAR-Lite stable release
+# This dockerfile builds the SOAR Lite stable release
 FROM python:3.10-slim
 LABEL maintainer="Renato Kopke <renatokopke@gmail.com>"
 

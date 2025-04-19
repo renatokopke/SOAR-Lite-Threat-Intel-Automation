@@ -16,6 +16,7 @@
 # limitations under the License.
 
 import os
+import sys
 from datetime import datetime
 from collections import Counter
 import joblib
@@ -26,6 +27,13 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, accuracy_score, precision_score, recall_score, f1_score
 import plotly.graph_objects as go
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+
+from core.services.create_alert_dataset import example_data
+
+import logging
+logging.basicConfig(level=logging.INFO)
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
@@ -43,29 +51,48 @@ os.makedirs(charts_dir, exist_ok=True)
 
 # Load dataset
 df = pd.read_csv(data_path)
+
+
+# Validate dataset before proceeding
+def is_dataset_ready(df):
+    if df.empty:
+        return False
+    if "suggested_action" not in df.columns:
+        return False
+    if len(df["suggested_action"].unique()) < 2:
+        return False
+    return True
+
+
+if not is_dataset_ready(df):
+    logging.info("[!] Insufficient or missing data in dataset_for_ml.csv.")
+    logging.info("[!] Using example fallback dataset to initialize the model...")
+
+    df = pd.DataFrame(example_data)
+
 le_event, le_country, le_usage, le_action = LabelEncoder(), LabelEncoder(), LabelEncoder(), LabelEncoder()
 df["event_type_enc"] = le_event.fit_transform(df["event_type"])
 df["country_enc"] = le_country.fit_transform(df["country"])
 df["usage_type_enc"] = le_usage.fit_transform(df["usage_type"])
 df["action_enc"] = le_action.fit_transform(df["suggested_action"])
 
-X = df[["event_type_enc", "abuse_score", "total_reports", "country_enc", "usage_type_enc"]]
+X = df[["event_type_enc", "abuse_score", "total_reports", "country_enc", "usage_type_enc", "legacy_risk_score"]]
 y = df["action_enc"]
 stratify_param = y if min(Counter(y).values()) >= 2 else None
 
 from math import ceil
 
 num_classes = y.nunique()
-min_test_size = max(3, ceil(len(y) * 0.2))
+min_test_size = min(max(3, ceil(len(y) * 0.2)), len(y) - 1)
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y,
     test_size=min_test_size,
-    stratify=y,
+    stratify=stratify_param,
     random_state=42
 )
 
-print(f"Number of classes: {num_classes}, selected test_size: {min_test_size}")
+logging.info(f"Number of classes: {num_classes}, selected test_size: {min_test_size}")
 
 # Training model
 model = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -158,4 +185,4 @@ table_html = df_metrics_all[["version", "accuracy", "precision_macro", "recall_m
 with open(output_dashboard, "w") as f:
     f.write(template.replace("{table}", table_html))
 
-print("Dashboard updated with sucesso!")
+logging.info("Dashboard updated with sucesso!")

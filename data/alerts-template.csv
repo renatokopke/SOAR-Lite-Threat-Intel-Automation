@@ -1,0 +1,11 @@
+timestamp,ioc_type,ioc_value,event_type
+2025-04-14T08:30:00,ip,45.83.91.12,port_scan
+2025-04-14T08:35:00,ip,82.94.243.11,suspicious_login
+2025-04-14T08:40:00,domain,maliciousdomain.com,data_exfiltration
+2025-04-14T08:45:00,hash,44d88612fea8a8f36de82e1278abb02f,malware_traffic
+2025-04-14T08:50:00,url,http://phishing-site.com/index.html,suspicious_login
+2025-04-14T08:55:00,ip,8.8.8.8,brute_force
+2025-04-14T09:00:00,domain,login.fakebank.io,c2_traffic
+2025-04-14T09:05:00,hash,d41d8cd98f00b204e9800998ecf8427e,malware_traffic
+2025-04-14T09:10:00,ip,139.99.114.11,port_scan
+2025-04-14T09:15:00,atip,43.240.223.15,suspicious_login

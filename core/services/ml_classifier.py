@@ -84,19 +84,24 @@ def classify_alert(alert: dict) -> str:
             alert.get("enrichment", {}).get("abuse_score", 0),
             alert.get("enrichment", {}).get("total_reports", 0),
             country_enc,
-            usage_type_enc
-        ]], columns=["event_type_enc", "abuse_score", "total_reports", "country_enc", "usage_type_enc"])
+            usage_type_enc,
+            alert.get("legacy_risk_score", 0)
+        ]], columns=["event_type_enc", "abuse_score", "total_reports", "country_enc", "usage_type_enc",
+                     "legacy_risk_score"])
 
         prediction = model.predict(features)[0]
+        proba = model.predict_proba(features)[0]
+        confidence = max(proba)
+
         logging.info(f"[ML] Raw prediction index: {prediction}")
 
         try:
             label = le_action.inverse_transform([prediction])[0]
-            logging.info(f"[ML] Prediction label: {label}")
-            return label
+            logging.info(f"[ML] Prediction label: {label} (confidence: {confidence:.2f})")
+            return label, confidence
         except Exception as e:
             logging.warning(f"[ML] Failed to decode predicted label '{prediction}': {e}")
-            return "unclassified"
+            return "unclassified", 0.0
 
     except Exception as e:
         logging.warning(f"[ML] Failed to classify alert: {e}")
